@@ -1,45 +1,45 @@
 #include <TinyGPS++.h>
  
-// Definir la instancia del GPS y el puerto serial
+// Definim la instància del GPS i el port sèrie
 TinyGPSPlus gps;
-HardwareSerial mySerial(1);  // Usamos UART1 en el ESP32 (puedes usar UART0 o UART2 también)
+HardwareSerial mySerial(1);  // Utilitzem UART1 en l'ESP32 (podem usar també UART0 o UART2)
  
-#define RX_PIN 16  // Pin RX para el GPS
-#define TX_PIN 17  // Pin TX para el GPS
+#define RX_PIN 16  // Pin RX per al GPS
+#define TX_PIN 17  // Pin TX per al GPS
  
 void setup()
 {
- // Inicializa la comunicación con el monitor serie
+ // Inicialitzem la comunicació amb el monitor sèrie
  Serial.begin(115200);
- while (!Serial);
+ while (!Serial);  // Esperem que el monitor sèrie estigui llest
  
- // Inicializa la comunicación serial con el GPS
+ // Inicialitzem la comunicació sèrie amb el GPS
  mySerial.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN);
  
- Serial.println("Esperando coordenadas del GPS...");
+ Serial.println("Esperant coordenades del GPS...");
 }
  
 void loop()
 {
- // Lee los datos del GPS
+ // Llegim les dades del GPS
  while (mySerial.available() > 0)
  {
-   gps.encode(mySerial.read());  // Decodifica cada byte recibido del GPS
+   gps.encode(mySerial.read());  // Decodifiquem cada byte rebut del GPS
  
-   if (gps.location.isUpdated())  // Si la ubicación ha sido actualizada
+   if (gps.location.isUpdated())  // Si la ubicació s'ha actualitzat
    {
-     // Muestra la latitud y longitud en formato decimal
+     // Mostrem la latitud i longitud en format decimal
      float latitude = gps.location.lat();
      float longitude = gps.location.lng();
  
      Serial.print("Latitud: ");
-     Serial.print(latitude, 6);  // Muestra la latitud con 6 decimales
+     Serial.print(latitude, 6);  // Mostrem la latitud amb 6 decimals
      Serial.print("  Longitud: ");
-     Serial.print(longitude, 6);  // Muestra la longitud con 6 decimales
+     Serial.print(longitude, 6);  // Mostrem la longitud amb 6 decimals
      Serial.println();
  
-     // Opcional: también puedes mostrar más datos, como la cantidad de satélites
-     Serial.print("Satélites: ");
+     // Opcional: també podem mostrar més dades, com el nombre de satèl·lits
+     Serial.print("Satèl·lits: ");
      Serial.println(gps.satellites.value());
    }
  }
